@@ -1,0 +1,36 @@
+package tr.rimerun.jm;
+
+// ometa FactorialCalculatingParser <: BaseTestParser
+@SuppressWarnings({"UnusedDeclaration"})
+public class FactorialCalculatingParser extends BaseTestParser {
+    public FactorialCalculatingParser(LinkedInputStream input) {
+        super(input);
+    }
+
+    // fact 0  =                -> 1
+    // fact :n = fact(n - 1):m  -> n * m
+    public Object fact() {
+        return _or(
+                new SimpleFn() {
+                    public Object call() {
+                        applyWithArgs("exactly", 0);
+                        return 1;
+                    }
+                },
+                new SimpleFn() {
+                    public Object call() {
+                        Integer n = (Integer) apply("anything");
+                        Integer m = (Integer) applyWithArgs("fact", n - 1);
+
+                        return n * m;
+                    }
+                }
+        );
+    }
+
+    // start = num:n fact(n):f   -> f
+    public Object start() {
+        Integer n = (Integer) apply("num");
+        return applyWithArgs("fact", n);
+    }
+}
