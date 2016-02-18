@@ -16,7 +16,7 @@ public class TrialParser extends BaseTestParser {
     //     | num:n                  -> n
     private Object exp() {
         return _or(
-                new SimpleFn() {
+                new Rule() {
                     public Object call() {
                         Object e = apply("exp");
                         apply("spaces");
@@ -27,7 +27,7 @@ public class TrialParser extends BaseTestParser {
                     }
                 },
 
-                new SimpleFn() {
+                new Rule() {
                     public Object call() {
                         Object e = apply("exp");
                         apply("spaces");
@@ -38,7 +38,7 @@ public class TrialParser extends BaseTestParser {
                     }
                 },
 
-                new SimpleFn() {
+                new Rule() {
                     public Object call() {
                         return apply("num");
                     }
@@ -48,7 +48,7 @@ public class TrialParser extends BaseTestParser {
 
     // notx = ~'x' :a -> a
     private Object notx() {
-        _not(new SimpleFn() {
+        _not(new Rule() {
             public Object call() {
                 return applyWithArgs("exactly", 'x');
             }
@@ -68,12 +68,12 @@ public class TrialParser extends BaseTestParser {
     private Object hello3AndSomething() {
         final Object[] aHolder = new Object[1];
 
-        _form(new SimpleFn() {
+        _form(new Rule() {
             public Object call() {
                 applyWithArgs("exactly", "hello");
                 applyWithArgs("exactly", 3);
 
-                return _form(new SimpleFn() {
+                return _form(new Rule() {
                     public Object call() {
                         aHolder[0] = apply("anything");
                         return applyWithArgs("exactly", 8);
@@ -89,13 +89,13 @@ public class TrialParser extends BaseTestParser {
     private Object complexList() {
         final Object[] aHolder = new Object[1];
 
-        _form(new SimpleFn() {
+        _form(new Rule() {
             public Object call() {
                 applyWithArgs("exactly", 1);
 
-                aHolder[0] = _many1(new SimpleFn() {
+                aHolder[0] = _many1(new Rule() {
                     public Object call() {
-                        return _form(new SimpleFn() {
+                        return _form(new Rule() {
                             public Object call() {
                                 applyWithArgs("exactly", 3);
                                 return applyWithArgs("exactly", 5);
@@ -117,7 +117,7 @@ public class TrialParser extends BaseTestParser {
         final String p = (String) apply("anything");
 
         final Object first = apply(p);
-        final List<Object> rest = _many(new SimpleFn() {
+        final List<Object> rest = _many(new Rule() {
             public Object call() {
                 applyWithArgs("token", ",");
                 return apply(p);

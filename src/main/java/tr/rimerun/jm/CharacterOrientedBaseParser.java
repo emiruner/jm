@@ -22,12 +22,12 @@ public class CharacterOrientedBaseParser extends BaseParser {
         applyWithArgs("seq", chars);
 
         _or(
-                new SimpleFn() {
+                new Rule() {
                     public Object call() {
                         return _many1("space");
                     }
                 },
-                new SimpleFn() {
+                new Rule() {
                     public Object call() {
                         return apply("end");
                     }

@@ -94,14 +94,14 @@ public class BaseParser {
         }
     }
 
-    protected List<Object> _many(SimpleFn fun) {
+    protected List<Object> _many(Rule rule) {
         ArrayList<Object> result = new ArrayList<Object>();
 
         while (true) {
             final LinkedInputStream lastPos = input;
 
             try {
-                result.add(fun.call());
+                result.add(rule.call());
             } catch (ParseFailure ex) {
                 input = lastPos;
                 break;
@@ -112,36 +112,36 @@ public class BaseParser {
     }
 
     protected List<Object> _many(final String ruleName) {
-        return _many(new SimpleFn() {
+        return _many(new Rule() {
             public Object call() {
                 return apply(ruleName);
             }
         });
     }
 
-    protected List<Object> _many1(SimpleFn fun) {
+    protected List<Object> _many1(Rule rule) {
         ArrayList<Object> result = new ArrayList<Object>();
 
-        result.add(fun.call());
-        result.addAll(_many(fun));
+        result.add(rule.call());
+        result.addAll(_many(rule));
 
         return result;
     }
 
     protected List<Object> _many1(final String ruleName) {
-        return _many1(new SimpleFn() {
+        return _many1(new Rule() {
             public Object call() {
                 return apply(ruleName);
             }
         });
     }
 
-    protected Object _or(SimpleFn... funs) {
+    protected Object _or(Rule... rules) {
         LinkedInputStream origPos = input;
 
-        for (SimpleFn fun : funs) {
+        for (Rule rule : rules) {
             try {
-                return fun.call();
+                return rule.call();
             } catch (ParseFailure ex) {
                 input = origPos;
             }
@@ -150,11 +150,11 @@ public class BaseParser {
         throw new ParseFailure();
     }
 
-    protected Object _not(SimpleFn simpleFn) {
+    protected Object _not(Rule rule) {
         final LinkedInputStream origPos = input;
 
         try {
-            simpleFn.call();
+            rule.call();
         } catch (ParseFailure ex) {
             input = origPos;
             return true;
@@ -163,11 +163,11 @@ public class BaseParser {
         throw new ParseFailure();
     }
 
-    protected Object _opt(SimpleFn simpleFn) {
+    protected Object _opt(Rule rule) {
         LinkedInputStream origPos = input;
 
         try {
-            return simpleFn.call();
+            return rule.call();
         } catch (ParseFailure ex) {
             input = origPos;
         }
@@ -176,7 +176,7 @@ public class BaseParser {
     }
 
     @SuppressWarnings({"unchecked"})
-    protected Object _form(SimpleFn simpleFn) {
+    protected Object _form(Rule rule) {
         List<Object> list = (List<Object>) applyWithPred("anything", new Predicate() {
             public boolean eval(Object o) {
                 return o instanceof List;
@@ -186,7 +186,7 @@ public class BaseParser {
         LinkedInputStream origInput = input;
         input = BasicLinkedInputStream.fromList(list);
 
-        simpleFn.call();
+        rule.call();
         apply("end");
 
         input = origInput;
@@ -221,7 +221,7 @@ public class BaseParser {
 
     // end = ~anything
     protected Object end() {
-        return _not(new SimpleFn() {
+        return _not(new Rule() {
             public Object call() {
                 return apply("anything");
             }

@@ -1,5 +1,5 @@
 package tr.rimerun.jm;
 
-public interface SimpleFn {
+public interface Rule {
     Object call();
 }
