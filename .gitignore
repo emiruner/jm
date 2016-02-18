@@ -7,3 +7,4 @@
 
 # Using maven, ignore build dir.
 target/
+.idea/
