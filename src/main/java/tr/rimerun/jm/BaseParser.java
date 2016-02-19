@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@SuppressWarnings({"UnusedDeclaration"})
 public class BaseParser {
     protected LinkedInputStream input;
 
@@ -53,16 +52,6 @@ public class BaseParser {
         return memoRec.getAnswer();
     }
 
-    protected void ensure(boolean pred) {
-        if(!pred) {
-            throw new ParseFailure();
-        }
-    }
-
-    protected void prependInput(Object v) {
-        this.input = new BasicLinkedInputStream(v, input);
-    }
-
     private Object evalRule(String ruleName) {
         final Method method = ClassUtils.findMethod(getClass(), ruleName);
 
@@ -79,6 +68,16 @@ public class BaseParser {
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void ensure(boolean pred) {
+        if(!pred) {
+            throw new ParseFailure();
+        }
+    }
+
+    protected void prependInput(Object v) {
+        this.input = new BasicLinkedInputStream(v, input);
     }
 
     protected List<Object> _many(Rule rule) {
@@ -146,7 +145,6 @@ public class BaseParser {
         return null;
     }
 
-    @SuppressWarnings({"unchecked"})
     protected Object _form(Rule rule) {
         Object obj = apply("anything");
         ensure(obj instanceof List);
