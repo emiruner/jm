@@ -65,15 +65,18 @@ public class BaseParser {
     }
 
     public Object applyWithArgs(String ruleName, Object... params) {
-        for (int i = params.length - 1; i >= 0; --i) {
-            prependInput(params[i]);
-        }
-
+        prependMultipleInputs(params);
         return evalRule(ruleName);
     }
 
     private void prependInput(Object v) {
         this.input = new BasicLinkedInputStream(v, input);
+    }
+
+    private void prependMultipleInputs(Object... inputs) {
+        for (int i = inputs.length - 1; i >= 0; --i) {
+            prependInput(inputs[i]);
+        }
     }
 
     private Object evalRule(String ruleName) {
