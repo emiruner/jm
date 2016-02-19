@@ -70,7 +70,8 @@ public class ParserTest {
     @Test
     public void higherOrder() {
         final TrialParser parser = new TrialParser(BasicLinkedInputStream.fromString("45, 787, 997"));
-        assertEquals(list(45, 787, 997), parser.applyWithArgs("listOf", "num"));
+        parser.prependInput("num");
+        assertEquals(list(45, 787, 997), parser.apply("listOf"));
     }
 
     @Test

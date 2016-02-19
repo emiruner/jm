@@ -31,7 +31,8 @@ public class BaseTestParser extends CharacterOrientedBaseParser {
 
         Object minus = _opt(new Rule() {
             public Object execute() {
-                return applyWithArgs("exactly", '-');
+                prependInput('-');
+                return apply("exactly");
             }
         });
 

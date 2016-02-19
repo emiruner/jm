@@ -20,7 +20,10 @@ public class TrialParser extends BaseTestParser {
                     public Object execute() {
                         Object e = apply("exp");
                         apply("spaces");
-                        applyWithArgs("exactly", '+');
+
+                        prependInput('+');
+                        apply("exactly");
+
                         Object n = apply("num");
 
                         return list("Add", e, n);
@@ -31,7 +34,10 @@ public class TrialParser extends BaseTestParser {
                     public Object execute() {
                         Object e = apply("exp");
                         apply("spaces");
-                        applyWithArgs("exactly", '-');
+
+                        prependInput('-');
+                        apply("exactly");
+
                         Object n = apply("num");
 
                         return list("Sub", e, n);
@@ -50,7 +56,8 @@ public class TrialParser extends BaseTestParser {
     private Object notx() {
         _not(new Rule() {
             public Object execute() {
-                return applyWithArgs("exactly", 'x');
+                prependInput('x');
+                return apply("exactly");
             }
         });
 
@@ -59,8 +66,12 @@ public class TrialParser extends BaseTestParser {
 
     // abAndEnd = 'a' 'b' end
     private Object abAndEnd() {
-        applyWithArgs("exactly", 'a');
-        applyWithArgs("exactly", 'b');
+        prependInput('a');
+        apply("exactly");
+
+        prependInput('b');
+        apply("exactly");
+
         return apply("end");
     }
 
@@ -70,13 +81,18 @@ public class TrialParser extends BaseTestParser {
 
         _form(new Rule() {
             public Object execute() {
-                applyWithArgs("exactly", "hello");
-                applyWithArgs("exactly", 3);
+                prependInput("hello");
+                apply("exactly");
+
+                prependInput(3);
+                apply("exactly");
 
                 return _form(new Rule() {
                     public Object execute() {
                         aHolder[0] = apply("anything");
-                        return applyWithArgs("exactly", 8);
+
+                        prependInput(8);
+                        return apply("exactly");
                     }
                 });
             }
@@ -91,20 +107,25 @@ public class TrialParser extends BaseTestParser {
 
         _form(new Rule() {
             public Object execute() {
-                applyWithArgs("exactly", 1);
+                prependInput(1);
+                apply("exactly");
 
                 aHolder[0] = _many1(new Rule() {
                     public Object execute() {
                         return _form(new Rule() {
                             public Object execute() {
-                                applyWithArgs("exactly", 3);
-                                return applyWithArgs("exactly", 5);
+                                prependInput(3);
+                                apply("exactly");
+
+                                prependInput(5);
+                                return apply("exactly");
                             }
                         });
                     }
                 });
 
-                return applyWithArgs("exactly", 7);
+                prependInput(7);
+                return apply("exactly");
             }
         });
 
@@ -119,7 +140,9 @@ public class TrialParser extends BaseTestParser {
         final Object first = apply(p);
         final List<Object> rest = _many(new Rule() {
             public Object execute() {
-                applyWithArgs("token", ",");
+                prependInput(",");
+                apply("token");
+
                 return apply(p);
             }
         });
@@ -132,7 +155,10 @@ public class TrialParser extends BaseTestParser {
 
     // helloWorld = "hello" "world"
     private Object helloWorld() {
-        applyWithArgs("token", "hello");
-        return applyWithArgs("token", "world");
+        prependInput("hello");
+        apply("token");
+
+        prependInput("world");
+        return apply("token");
     }
 }

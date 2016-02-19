@@ -59,19 +59,8 @@ public class BaseParser {
         }
     }
 
-    public Object applyWithArgs(String ruleName, Object... params) {
-        prependMultipleInputs(params);
-        return evalRule(ruleName);
-    }
-
-    private void prependInput(Object v) {
+    protected void prependInput(Object v) {
         this.input = new BasicLinkedInputStream(v, input);
-    }
-
-    private void prependMultipleInputs(Object... inputs) {
-        for (int i = inputs.length - 1; i >= 0; --i) {
-            prependInput(inputs[i]);
-        }
     }
 
     private Object evalRule(String ruleName) {
@@ -209,7 +198,8 @@ public class BaseParser {
         final Collection items = (Collection) apply("anything");
 
         for (Object item : items) {
-            applyWithArgs("exactly", item);
+            prependInput(item);
+            apply("exactly");
         }
 
         return items;

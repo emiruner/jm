@@ -16,7 +16,9 @@ public class LeftRecursionTestParser extends BaseTestParser {
                        public Object execute() {
                            Object e = apply("expr");
                            apply("spaces");
-                           Object t = applyWithArgs("exactly", '-');
+
+                           prependInput('-');
+                           Object t = apply("exactly");
                            Object n = apply("num");
 
                            return list("Expr", e, t, n);

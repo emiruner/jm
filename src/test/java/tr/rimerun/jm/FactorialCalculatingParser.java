@@ -13,14 +13,17 @@ public class FactorialCalculatingParser extends BaseTestParser {
         return _or(
                 new Rule() {
                     public Object execute() {
-                        applyWithArgs("exactly", 0);
+                        prependInput(0);
+                        apply("exactly");
                         return 1;
                     }
                 },
                 new Rule() {
                     public Object execute() {
                         Integer n = (Integer) apply("anything");
-                        Integer m = (Integer) applyWithArgs("fact", n - 1);
+
+                        prependInput(n - 1);
+                        Integer m = (Integer) apply("fact");
 
                         return n * m;
                     }
@@ -31,6 +34,8 @@ public class FactorialCalculatingParser extends BaseTestParser {
     // start = num:n fact(n):f   -> f
     public Object start() {
         Integer n = (Integer) apply("num");
-        return applyWithArgs("fact", n);
+        prependInput(n);
+
+        return apply("fact");
     }
 }
