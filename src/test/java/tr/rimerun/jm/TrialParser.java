@@ -17,7 +17,7 @@ public class TrialParser extends BaseTestParser {
     private Object exp() {
         return _or(
                 new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         Object e = apply("exp");
                         apply("spaces");
                         applyWithArgs("exactly", '+');
@@ -28,7 +28,7 @@ public class TrialParser extends BaseTestParser {
                 },
 
                 new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         Object e = apply("exp");
                         apply("spaces");
                         applyWithArgs("exactly", '-');
@@ -39,7 +39,7 @@ public class TrialParser extends BaseTestParser {
                 },
 
                 new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         return apply("num");
                     }
                 }
@@ -49,7 +49,7 @@ public class TrialParser extends BaseTestParser {
     // notx = ~'x' :a -> a
     private Object notx() {
         _not(new Rule() {
-            public Object call() {
+            public Object execute() {
                 return applyWithArgs("exactly", 'x');
             }
         });
@@ -69,12 +69,12 @@ public class TrialParser extends BaseTestParser {
         final Object[] aHolder = new Object[1];
 
         _form(new Rule() {
-            public Object call() {
+            public Object execute() {
                 applyWithArgs("exactly", "hello");
                 applyWithArgs("exactly", 3);
 
                 return _form(new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         aHolder[0] = apply("anything");
                         return applyWithArgs("exactly", 8);
                     }
@@ -90,13 +90,13 @@ public class TrialParser extends BaseTestParser {
         final Object[] aHolder = new Object[1];
 
         _form(new Rule() {
-            public Object call() {
+            public Object execute() {
                 applyWithArgs("exactly", 1);
 
                 aHolder[0] = _many1(new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         return _form(new Rule() {
-                            public Object call() {
+                            public Object execute() {
                                 applyWithArgs("exactly", 3);
                                 return applyWithArgs("exactly", 5);
                             }
@@ -118,7 +118,7 @@ public class TrialParser extends BaseTestParser {
 
         final Object first = apply(p);
         final List<Object> rest = _many(new Rule() {
-            public Object call() {
+            public Object execute() {
                 applyWithArgs("token", ",");
                 return apply(p);
             }

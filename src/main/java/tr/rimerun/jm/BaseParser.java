@@ -101,7 +101,7 @@ public class BaseParser {
             final LinkedInputStream lastPos = input;
 
             try {
-                result.add(rule.call());
+                result.add(rule.execute());
             } catch (ParseFailure ex) {
                 input = lastPos;
                 break;
@@ -113,7 +113,7 @@ public class BaseParser {
 
     protected List<Object> _many(final String ruleName) {
         return _many(new Rule() {
-            public Object call() {
+            public Object execute() {
                 return apply(ruleName);
             }
         });
@@ -122,7 +122,7 @@ public class BaseParser {
     protected List<Object> _many1(Rule rule) {
         ArrayList<Object> result = new ArrayList<Object>();
 
-        result.add(rule.call());
+        result.add(rule.execute());
         result.addAll(_many(rule));
 
         return result;
@@ -130,7 +130,7 @@ public class BaseParser {
 
     protected List<Object> _many1(final String ruleName) {
         return _many1(new Rule() {
-            public Object call() {
+            public Object execute() {
                 return apply(ruleName);
             }
         });
@@ -141,7 +141,7 @@ public class BaseParser {
 
         for (Rule rule : rules) {
             try {
-                return rule.call();
+                return rule.execute();
             } catch (ParseFailure ex) {
                 input = origPos;
             }
@@ -154,7 +154,7 @@ public class BaseParser {
         final LinkedInputStream origPos = input;
 
         try {
-            rule.call();
+            rule.execute();
         } catch (ParseFailure ex) {
             input = origPos;
             return null;
@@ -167,7 +167,7 @@ public class BaseParser {
         LinkedInputStream origPos = input;
 
         try {
-            return rule.call();
+            return rule.execute();
         } catch (ParseFailure ex) {
             input = origPos;
         }
@@ -186,7 +186,7 @@ public class BaseParser {
         LinkedInputStream origInput = input;
         input = BasicLinkedInputStream.fromList(list);
 
-        rule.call();
+        rule.execute();
         apply("end");
 
         input = origInput;
@@ -222,7 +222,7 @@ public class BaseParser {
     // end = ~anything
     protected Object end() {
         return _not(new Rule() {
-            public Object call() {
+            public Object execute() {
                 return apply("anything");
             }
         });

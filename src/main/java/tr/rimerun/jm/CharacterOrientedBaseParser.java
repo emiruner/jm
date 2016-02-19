@@ -23,12 +23,12 @@ public class CharacterOrientedBaseParser extends BaseParser {
 
         _or(
                 new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         return _many1("space");
                     }
                 },
                 new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         return apply("end");
                     }
                 }

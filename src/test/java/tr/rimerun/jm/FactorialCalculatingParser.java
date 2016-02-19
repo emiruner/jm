@@ -12,13 +12,13 @@ public class FactorialCalculatingParser extends BaseTestParser {
     public Object fact() {
         return _or(
                 new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         applyWithArgs("exactly", 0);
                         return 1;
                     }
                 },
                 new Rule() {
-                    public Object call() {
+                    public Object execute() {
                         Integer n = (Integer) apply("anything");
                         Integer m = (Integer) applyWithArgs("fact", n - 1);
 

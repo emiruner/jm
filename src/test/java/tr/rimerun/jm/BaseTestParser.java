@@ -10,14 +10,14 @@ public class BaseTestParser extends CharacterOrientedBaseParser {
     //        | digit:d          -> (Character.digit((Character) d, 10)
     private Object rawNum() {
         return _or(new Rule() {
-                       public Object call() {
+                       public Object execute() {
                            Object n = apply("rawNum");
                            Object d = apply("digit");
 
                            return ((Integer) n) * 10 + Character.digit((Character) d, 10);
                        }
                    }, new Rule() {
-                       public Object call() {
+                       public Object execute() {
                            Object d = apply("digit");
                            return Character.digit((Character) d, 10);
                        }
@@ -30,7 +30,7 @@ public class BaseTestParser extends CharacterOrientedBaseParser {
         apply("spaces");
 
         Object minus = _opt(new Rule() {
-            public Object call() {
+            public Object execute() {
                 return applyWithArgs("exactly", '-');
             }
         });

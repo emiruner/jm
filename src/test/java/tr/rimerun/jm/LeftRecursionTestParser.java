@@ -13,7 +13,7 @@ public class LeftRecursionTestParser extends BaseTestParser {
     @SuppressWarnings({"UnusedDeclaration"})
     private Object expr() {
         return _or(new Rule() {
-                       public Object call() {
+                       public Object execute() {
                            Object e = apply("expr");
                            apply("spaces");
                            Object t = applyWithArgs("exactly", '-');
@@ -22,7 +22,7 @@ public class LeftRecursionTestParser extends BaseTestParser {
                            return list("Expr", e, t, n);
                        }
                    }, new Rule() {
-                       public Object call() {
+                       public Object execute() {
                            return apply("num");
                        }
                    }
