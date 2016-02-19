@@ -53,15 +53,10 @@ public class BaseParser {
         return memoRec.getAnswer();
     }
 
-    @SuppressWarnings({"unchecked"})
-    public Object applyWithPred(String ruleName, Predicate pred) {
-        Object answer = apply(ruleName);
-
-        if (pred.eval(answer)) {
-            return answer;
+    protected void ensure(boolean pred) {
+        if(!pred) {
+            throw new ParseFailure();
         }
-
-        throw new ParseFailure();
     }
 
     public Object applyWithArgs(String ruleName, Object... params) {
@@ -180,11 +175,10 @@ public class BaseParser {
 
     @SuppressWarnings({"unchecked"})
     protected Object _form(Rule rule) {
-        List<Object> list = (List<Object>) applyWithPred("anything", new Predicate() {
-            public boolean eval(Object o) {
-                return o instanceof List;
-            }
-        });
+        Object obj = apply("anything");
+        ensure(obj instanceof List);
+
+        List<Object> list = (List<Object>) obj;
 
         LinkedInputStream origInput = input;
         input = BasicLinkedInputStream.fromList(list);
@@ -205,11 +199,10 @@ public class BaseParser {
     // exactly :o = :p ? (o.equals(p)) -> p
     protected Object exactly() {
         final Object o = apply("anything");
-        return applyWithPred("anything", new Predicate() {
-            public boolean eval(Object parsed) {
-                return o.equals(parsed);
-            }
-        });
+        final Object p = apply("anything");
+
+        ensure(o.equals(p));
+        return p;
     }
 
     protected Object seq() {

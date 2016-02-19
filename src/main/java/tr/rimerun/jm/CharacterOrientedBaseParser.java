@@ -39,20 +39,16 @@ public class CharacterOrientedBaseParser extends BaseParser {
 
     // chr = :o ?(o instanceof Character) -> o
     private Object chr() {
-        return applyWithPred("anything", new Predicate() {
-            public boolean eval(Object o) {
-                return o instanceof Character;
-            }
-        });
+        Object o = apply("anything");
+        ensure(o instanceof Character);
+        return o;
     }
 
     // space = chr:ch ?(Character.isWhitespace(ch)) -> ch
     private Object space() {
-        return applyWithPred("chr", new Predicate<Character>() {
-            public boolean eval(Character ch) {
-                return Character.isWhitespace(ch);
-            }
-        });
+        Character chr = (Character) apply("chr");
+        ensure(Character.isWhitespace(chr));
+        return chr;
     }
 
     // spaces = space*
@@ -62,10 +58,8 @@ public class CharacterOrientedBaseParser extends BaseParser {
 
     // digit = chr:d ?(Character.isDigit(d)) -> d
     private Object digit() {
-        return applyWithPred("chr", new Predicate<Character>() {
-            public boolean eval(Character d) {
-                return Character.isDigit(d);
-            }
-        });
+        Character chr = (Character) apply("chr");
+        ensure(Character.isDigit(chr));
+        return chr;
     }
 }
