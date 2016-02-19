@@ -215,8 +215,8 @@ public class BaseParser {
     protected Object seq() {
         final Collection items = (Collection) apply("anything");
 
-        for (Object o : items) {
-            applyWithArgs("exactly", o);
+        for (Object item : items) {
+            applyWithArgs("exactly", item);
         }
 
         return items;
