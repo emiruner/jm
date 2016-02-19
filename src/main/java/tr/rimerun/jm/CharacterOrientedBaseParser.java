@@ -25,7 +25,11 @@ public class CharacterOrientedBaseParser extends BaseParser {
         _or(
                 new Rule() {
                     public Object execute() {
-                        return _many1("space");
+                        return _many1(new Rule() {
+                            public Object execute() {
+                                return apply("space");
+                            }
+                        });
                     }
                 },
                 new Rule() {
@@ -54,7 +58,11 @@ public class CharacterOrientedBaseParser extends BaseParser {
 
     // spaces = space*
     private Object spaces() {
-        return _many("space");
+        return _many(new Rule() {
+            public Object execute() {
+                return apply("space");
+            }
+        });
     }
 
     // digit = chr:d ?(Character.isDigit(d)) -> d

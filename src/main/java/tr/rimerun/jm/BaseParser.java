@@ -98,14 +98,6 @@ public class BaseParser {
         return result;
     }
 
-    protected List<Object> _many(final String ruleName) {
-        return _many(new Rule() {
-            public Object execute() {
-                return apply(ruleName);
-            }
-        });
-    }
-
     protected List<Object> _many1(Rule rule) {
         ArrayList<Object> result = new ArrayList<Object>();
 
@@ -113,14 +105,6 @@ public class BaseParser {
         result.addAll(_many(rule));
 
         return result;
-    }
-
-    protected List<Object> _many1(final String ruleName) {
-        return _many1(new Rule() {
-            public Object execute() {
-                return apply(ruleName);
-            }
-        });
     }
 
     protected Object _or(Rule... rules) {
