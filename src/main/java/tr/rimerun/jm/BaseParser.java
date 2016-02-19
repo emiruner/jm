@@ -21,8 +21,8 @@ public class BaseParser {
             final LinkedInputStream origPos = input;
             final Failer failer = new Failer();
 
-            origPos.memo(ruleName, failer);
-            memoRec = origPos.memo(ruleName, new MemoEntry(evalRule(ruleName), input));
+            origPos.memoize(ruleName, failer);
+            memoRec = origPos.memoize(ruleName, new MemoEntry(evalRule(ruleName), input));
 
             if (failer.isUsed()) {
                 final LinkedInputStream lastPos = input;

@@ -14,7 +14,7 @@ public abstract class LinkedInputStreamBase implements LinkedInputStream {
         return memo.get(rule);
     }
 
-    public MemoEntry memo(String rule, MemoEntry newMemo) {
+    public MemoEntry memoize(String rule, MemoEntry newMemo) {
         memo.put(rule, newMemo);
         return newMemo;
     }
