@@ -31,6 +31,12 @@ public class ParserTest {
         assertEquals('y', parser.apply("notx"));
     }
 
+    @Test(expected = ParseFailure.class)
+    public void notFail() {
+        final TrialParser parser = new TrialParser(BasicLinkedInputStream.fromString("x"));
+        assertEquals('y', parser.apply("notx"));
+    }
+
     @Test
     public void endMatch() {
         final TrialParser parser = new TrialParser(BasicLinkedInputStream.fromString("ab"));

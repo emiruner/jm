@@ -157,7 +157,7 @@ public class BaseParser {
             rule.call();
         } catch (ParseFailure ex) {
             input = origPos;
-            return true;
+            return null;
         }
 
         throw new ParseFailure();
