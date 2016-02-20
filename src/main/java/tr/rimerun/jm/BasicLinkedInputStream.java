@@ -46,4 +46,8 @@ public class BasicLinkedInputStream extends LinkedInputStreamBase {
 
         return current;
     }
+
+    public static LinkedInputStream singleElementList(Object element) {
+        return new BasicLinkedInputStream(element, new EndLinkedInputStream());
+    }
 }

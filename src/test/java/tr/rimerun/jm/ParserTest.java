@@ -50,20 +50,26 @@ public class ParserTest {
     }
 
     @Test
+    public void simpleListMatch() {
+        final TrialParser parser = new TrialParser(BasicLinkedInputStream.singleElementList(list("hello", 3)));
+        assertEquals(null, parser.apply("helloAnd3"));
+    }
+
+    @Test
     public void listMatch() {
-        final TrialParser parser = new TrialParser(BasicLinkedInputStream.fromList(list(list("hello", 3, list(7, 8)))));
+        final TrialParser parser = new TrialParser(BasicLinkedInputStream.singleElementList(list("hello", 3, list(7, 8))));
         assertEquals(7, parser.apply("hello3AndSomething"));
     }
 
     @Test(expected = ParseFailure.class)
     public void listNotMatch() {
-        final TrialParser parser = new TrialParser(BasicLinkedInputStream.fromList(list(list("hello", 3, list(7, 1)))));
+        final TrialParser parser = new TrialParser(BasicLinkedInputStream.singleElementList(list("hello", 3, list(7, 1))));
         assertEquals(7, parser.apply("hello3AndSomething"));
     }
 
     @Test
     public void complexList() {
-        final TrialParser parser = new TrialParser(BasicLinkedInputStream.fromList(list(list(1, list(3, 5), list(3, 5), 7))));
+        final TrialParser parser = new TrialParser(BasicLinkedInputStream.singleElementList(list(1, list(3, 5), list(3, 5), 7)));
         assertEquals(list(list(3, 5), list(3, 5)), parser.apply("complexList"));
     }
 

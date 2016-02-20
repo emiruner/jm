@@ -75,6 +75,21 @@ public class TrialParser extends BaseTestParser {
         return apply("end");
     }
 
+    // helloAnd3 = ['hello' 3]
+    private Object helloAnd3() {
+        _form(new Rule() {
+            public Object execute() {
+                prependInput("hello");
+                apply("exactly");
+
+                prependInput(3);
+                return apply("exactly");
+            }
+        });
+
+        return null;
+    };
+
     // hello3AndSomething = ['hello' 3 [:a 8]] -> a
     private Object hello3AndSomething() {
         final Object[] aHolder = new Object[1];
