@@ -145,26 +145,38 @@ public class BaseParser {
         return null;
     }
 
+    protected Object _anything() {
+        Object answer = input.head();
+        input = input.tail();
+        return answer;
+    }
+
     protected Object _form(Rule rule) {
-        Object obj = apply("anything");
-        ensure(obj instanceof List);
-
-        List<Object> list = (List<Object>) obj;
-
         LinkedInputStream origInput = input;
+
+        Object obj = _anything();
+
+        if(!(obj instanceof List)) {
+            input = origInput;
+            throw new ParseFailure();
+        }
+
+        List list = (List) obj;
         input = BasicLinkedInputStream.fromList(list);
 
         rule.execute();
-        apply("end");
 
-        input = origInput;
+        if(!(input instanceof EndLinkedInputStream)) {
+            input = origInput;
+            throw new ParseFailure();
+        }
+
+        input = origInput.tail();
         return list;
     }
 
     protected Object anything() {
-        Object answer = input.head();
-        input = input.tail();
-        return answer;
+        return _anything();
     }
 
     // exactly :o = :p ? (o.equals(p)) -> p
