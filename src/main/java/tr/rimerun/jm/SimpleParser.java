@@ -49,6 +49,22 @@ public class SimpleParser extends Parser {
                 });
             }
         });
+
+        addRule("lookAhead", new Rule() {
+            public Object execute() {
+                final String whatFollows = (String) apply("anything");
+
+                return _not(new Rule() {
+                    public Object execute() {
+                        return _not(new Rule() {
+                            public Object execute() {
+                                return apply(whatFollows);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 
     @Override
