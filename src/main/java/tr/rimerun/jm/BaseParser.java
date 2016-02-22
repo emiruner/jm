@@ -77,7 +77,7 @@ public class BaseParser {
     }
 
     protected void prependInput(Object v) {
-        this.input = new BasicLinkedInputStream(v, input);
+        this.input = new SimpleLinkedInputStream(v, input);
     }
 
     protected List<Object> _many(Rule rule) {
@@ -162,7 +162,7 @@ public class BaseParser {
         }
 
         List list = (List) obj;
-        input = BasicLinkedInputStream.fromList(list);
+        input = SimpleLinkedInputStream.fromList(list);
 
         rule.execute();
 
