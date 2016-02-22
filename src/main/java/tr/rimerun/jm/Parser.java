@@ -1,15 +1,12 @@
 package tr.rimerun.jm;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class BaseParser {
+public abstract class Parser {
     protected LinkedInputStream input;
 
-    public BaseParser(LinkedInputStream input) {
+    public Parser(LinkedInputStream input) {
         this.input = input;
     }
 
@@ -21,7 +18,7 @@ public class BaseParser {
             final Failer failer = new Failer();
 
             origPos.memoize(ruleName, failer);
-            memoRec = origPos.memoize(ruleName, new MemoEntry(evalRule(ruleName), input));
+            memoRec = origPos.memoize(ruleName, new MemoEntry(eval(ruleName), input));
 
             if (failer.isUsed()) {
                 final LinkedInputStream lastPos = input;
@@ -30,7 +27,7 @@ public class BaseParser {
                     try {
                         input = origPos;
 
-                        final Object answer = evalRule(ruleName);
+                        final Object answer = eval(ruleName);
 
                         if (input == lastPos) {
                             break;
@@ -52,23 +49,7 @@ public class BaseParser {
         return memoRec.getAnswer();
     }
 
-    private Object evalRule(String ruleName) {
-        final Method method = ClassUtils.findMethod(getClass(), ruleName);
-
-        if (method == null) {
-            throw new RuntimeException("unknown rule: " + ruleName);
-        }
-
-        method.setAccessible(true);
-
-        try {
-            return method.invoke(this);
-        } catch (InvocationTargetException e) {
-            throw (RuntimeException) e.getCause();
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-    }
+    protected abstract Object eval(String ruleName);
 
     protected void ensure(boolean pred) {
         if(!pred) {
@@ -173,38 +154,5 @@ public class BaseParser {
 
         input = origInput.tail();
         return list;
-    }
-
-    protected Object anything() {
-        return _anything();
-    }
-
-    // exactly :o = :p ? (o.equals(p)) -> p
-    protected Object exactly() {
-        final Object o = apply("anything");
-        final Object p = apply("anything");
-
-        ensure(o.equals(p));
-        return p;
-    }
-
-    protected Object seq() {
-        final Collection items = (Collection) apply("anything");
-
-        for (Object item : items) {
-            prependInput(item);
-            apply("exactly");
-        }
-
-        return items;
-    }
-
-    // end = ~anything
-    protected Object end() {
-        return _not(new Rule() {
-            public Object execute() {
-                return apply("anything");
-            }
-        });
     }
 }

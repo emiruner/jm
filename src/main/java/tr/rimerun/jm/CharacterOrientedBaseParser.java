@@ -3,7 +3,7 @@ package tr.rimerun.jm;
 import java.util.ArrayList;
 
 @SuppressWarnings({"UnusedDeclaration"})
-public class CharacterOrientedBaseParser extends BaseParser {
+public class CharacterOrientedBaseParser extends ReflectionUsingParser {
     public CharacterOrientedBaseParser(LinkedInputStream input) {
         super(input);
     }
