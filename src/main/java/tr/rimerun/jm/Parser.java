@@ -61,6 +61,11 @@ public abstract class Parser {
         this.input = new SimpleLinkedInputStream(v, input);
     }
 
+    protected Object applyWithArgs(String rule, Object arg) {
+        prependInput(arg);
+        return apply(rule);
+    }
+
     protected List<Object> _many(Rule rule) {
         ArrayList<Object> result = new ArrayList<Object>();
 

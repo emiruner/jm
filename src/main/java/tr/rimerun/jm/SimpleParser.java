@@ -33,8 +33,7 @@ public class SimpleParser extends Parser {
                 final Collection items = (Collection) apply("anything");
 
                 for (Object item : items) {
-                    prependInput(item);
-                    apply("exactly");
+                    applyWithArgs("exactly", item);
                 }
 
                 return items;

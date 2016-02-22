@@ -21,8 +21,7 @@ public class TrialParser extends BaseTestParser {
                                 Object e = apply("exp");
                                 apply("spaces");
 
-                                prependInput('+');
-                                apply("exactly");
+                                applyWithArgs("exactly", '+');
 
                                 Object n = apply("num");
 
@@ -35,8 +34,7 @@ public class TrialParser extends BaseTestParser {
                                 Object e = apply("exp");
                                 apply("spaces");
 
-                                prependInput('-');
-                                apply("exactly");
+                                applyWithArgs("exactly", '-');
 
                                 Object n = apply("num");
 
@@ -54,8 +52,7 @@ public class TrialParser extends BaseTestParser {
             public Object execute() {
                 _not(new Rule() {
                     public Object execute() {
-                        prependInput('x');
-                        return apply("exactly");
+                        return applyWithArgs("exactly", 'x');
                     }
                 });
 
@@ -66,11 +63,8 @@ public class TrialParser extends BaseTestParser {
         // abAndEnd = 'a' 'b' end
         addRule("abAndEnd", new Rule() {
             public Object execute() {
-                prependInput('a');
-                apply("exactly");
-
-                prependInput('b');
-                apply("exactly");
+                applyWithArgs("exactly", 'a');
+                applyWithArgs("exactly", 'b');
 
                 return apply("end");
             }
@@ -81,11 +75,8 @@ public class TrialParser extends BaseTestParser {
             public Object execute() {
                 _form(new Rule() {
                     public Object execute() {
-                        prependInput("hello");
-                        apply("exactly");
-
-                        prependInput(3);
-                        return apply("exactly");
+                        applyWithArgs("exactly", "hello");
+                        return applyWithArgs("exactly", 3);
                     }
                 });
 
@@ -100,18 +91,13 @@ public class TrialParser extends BaseTestParser {
 
                 _form(new Rule() {
                     public Object execute() {
-                        prependInput("hello");
-                        apply("exactly");
-
-                        prependInput(3);
-                        apply("exactly");
+                        applyWithArgs("exactly", "hello");
+                        applyWithArgs("exactly", 3);
 
                         return _form(new Rule() {
                             public Object execute() {
                                 aHolder[0] = apply("anything");
-
-                                prependInput(8);
-                                return apply("exactly");
+                                return applyWithArgs("exactly", 8);
                             }
                         });
                     }
@@ -128,25 +114,20 @@ public class TrialParser extends BaseTestParser {
 
                 _form(new Rule() {
                     public Object execute() {
-                        prependInput(1);
-                        apply("exactly");
+                        applyWithArgs("exactly", 1);
 
                         aHolder[0] = _many1(new Rule() {
                             public Object execute() {
                                 return _form(new Rule() {
                                     public Object execute() {
-                                        prependInput(3);
-                                        apply("exactly");
-
-                                        prependInput(5);
-                                        return apply("exactly");
+                                        applyWithArgs("exactly", 3);
+                                        return applyWithArgs("exactly", 5);
                                     }
                                 });
                             }
                         });
 
-                        prependInput(7);
-                        return apply("exactly");
+                        return applyWithArgs("exactly", 7);
                     }
                 });
 
@@ -162,9 +143,7 @@ public class TrialParser extends BaseTestParser {
                 final Object first = apply(p);
                 final List<Object> rest = _many(new Rule() {
                     public Object execute() {
-                        prependInput(",");
-                        apply("token");
-
+                        applyWithArgs("token", ",");
                         return apply(p);
                     }
                 });
@@ -179,11 +158,8 @@ public class TrialParser extends BaseTestParser {
         // helloWorld = "hello" "world"
         addRule("helloWorld", new Rule() {
             public Object execute() {
-                prependInput("hello");
-                apply("token");
-
-                prependInput("world");
-                return apply("token");
+                applyWithArgs("token", "hello");
+                return applyWithArgs("token", "world");
             }
         });
     }

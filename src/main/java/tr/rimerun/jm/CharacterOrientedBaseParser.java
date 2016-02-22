@@ -19,8 +19,7 @@ public class CharacterOrientedBaseParser extends SimpleParser {
                     chars.add(ch);
                 }
 
-                prependInput(chars);
-                apply("seq");
+                applyWithArgs("seq", chars);
 
                 _or(
                         new Rule() {
