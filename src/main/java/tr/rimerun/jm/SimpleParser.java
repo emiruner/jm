@@ -103,4 +103,8 @@ public class SimpleParser extends Parser {
 
         return _or(rules);
     }
+
+    protected Object _not(String ruleName) {
+        return _not(rules.get(ruleName));
+    }
 }
