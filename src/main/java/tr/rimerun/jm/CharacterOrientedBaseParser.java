@@ -1,6 +1,6 @@
 package tr.rimerun.jm;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 @SuppressWarnings({"UnusedDeclaration"})
 public class CharacterOrientedBaseParser extends SimpleParser {
@@ -11,23 +11,15 @@ public class CharacterOrientedBaseParser extends SimpleParser {
         addRule("token", new Rule() {
             public Object execute() {
                 final String value = (String) apply("anything");
+
                 apply("spaces");
+                applyWithArgs("seq", Arrays.asList(value.toCharArray()));
 
-                final ArrayList<Character> chars = new ArrayList<Character>(value.length());
-
-                for (char ch : value.toCharArray()) {
-                    chars.add(ch);
-                }
-
-                applyWithArgs("seq", chars);
-
-                _or(
-                        new Rule() {
-                            public Object execute() {
-                                return _many1("space");
-                            }
-                        },
-                        "end"
+                _or(new Rule() {
+                        public Object execute() {
+                            return _many1("space");
+                        }
+                    }, "end"
                 );
 
                 return value;
