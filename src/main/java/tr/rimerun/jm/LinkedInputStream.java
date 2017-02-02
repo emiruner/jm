@@ -5,7 +5,7 @@ public interface LinkedInputStream {
 
     LinkedInputStream tail();
 
-    MemoEntry memo(String rule);
+    MemoEntry memo(Rule rule);
 
-    MemoEntry memoize(String rule, MemoEntry newMemo);
+    MemoEntry memoize(Rule rule, MemoEntry newMemo);
 }

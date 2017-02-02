@@ -1,29 +1,29 @@
 package tr.rimerun.jm;
 
+import tr.rimerun.jm.rule.Exactly;
+import tr.rimerun.jm.rule.text.Num;
+import tr.rimerun.jm.rule.text.Spaces;
+
 import static tr.rimerun.jm.Util.list;
 
-// ometa LeftRecursionTestParser <: BaseTestParser
-public class LeftRecursionTestParser extends BaseTestParser {
-    public LeftRecursionTestParser(LinkedInputStream input) {
-        super(input);
+// ometa LeftRecursionTestParser
+public class LeftRecursionTestParser {
+    // expr = expr:e spaces '-':t num:n -> new Object[]{"Expr", e, t, n}
+    //      | num:n                     -> n
+    public static final Rule expr = new Rule() {
+        public Object execute(Parser parser) {
+            return parser._or(new Rule() {
+                           public Object execute(Parser parser) {
+                               Object e = parser.apply(expr);
+                               parser.apply(Spaces.Instance);
 
-        // expr = expr:e spaces '-':t num:n -> new Object[]{"Expr", e, t, n}
-        //      | num:n                     -> n
-        addRule("expr", new Rule() {
-            public Object execute() {
-                return _or(new Rule() {
-                               public Object execute() {
-                                   Object e = apply("expr");
-                                   apply("spaces");
+                               Object t = parser.applyWithArgs(Exactly.Instance, '-');
+                               Object n = parser.apply(Num.Instance);
 
-                                   Object t = applyWithArgs("exactly", '-');
-                                   Object n = apply("num");
-
-                                   return list("Expr", e, t, n);
-                               }
-                           }, "num"
-                );
-            }
-        });
-    }
+                               return list("Expr", e, t, n);
+                           }
+                       }, Num.Instance
+            );
+        }
+    };
 }

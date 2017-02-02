@@ -1,5 +1,5 @@
 package tr.rimerun.jm;
 
 public interface Rule {
-    Object execute();
+    Object execute(Parser parser);
 }

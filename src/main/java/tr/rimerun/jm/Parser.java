@@ -3,22 +3,22 @@ package tr.rimerun.jm;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Parser {
+public class Parser {
     protected LinkedInputStream input;
 
     public Parser(LinkedInputStream input) {
         this.input = input;
     }
 
-    public Object apply(String ruleName) {
-        MemoEntry memoRec = input.memo(ruleName);
+    public Object apply(Rule rule) {
+        MemoEntry memoRec = input.memo(rule);
 
         if (memoRec == null) {
             final LinkedInputStream origPos = input;
             final Failer failer = new Failer();
 
-            origPos.memoize(ruleName, failer);
-            memoRec = origPos.memoize(ruleName, new MemoEntry(eval(ruleName), input));
+            origPos.memoize(rule, failer);
+            memoRec = origPos.memoize(rule, new MemoEntry(rule.execute(this), input));
 
             if (failer.isUsed()) {
                 final LinkedInputStream lastPos = input;
@@ -27,7 +27,7 @@ public abstract class Parser {
                     try {
                         input = origPos;
 
-                        final Object answer = eval(ruleName);
+                        final Object answer = rule.execute(this);
 
                         if (input == lastPos) {
                             break;
@@ -49,9 +49,7 @@ public abstract class Parser {
         return memoRec.getAnswer();
     }
 
-    protected abstract Object eval(String ruleName);
-
-    protected void ensure(boolean pred) {
+    public void ensure(boolean pred) {
         if(!pred) {
             throw new ParseFailure();
         }
@@ -61,19 +59,19 @@ public abstract class Parser {
         this.input = new SimpleLinkedInputStream(v, input);
     }
 
-    protected Object applyWithArgs(String rule, Object arg) {
+    public Object applyWithArgs(Rule rule, Object arg) {
         prependInput(arg);
         return apply(rule);
     }
 
-    protected List<Object> _many(Rule rule) {
+    public List<Object> _many(Rule rule) {
         ArrayList<Object> result = new ArrayList<Object>();
 
         while (true) {
             final LinkedInputStream lastPos = input;
 
             try {
-                result.add(rule.execute());
+                result.add(rule.execute(this));
             } catch (ParseFailure ex) {
                 input = lastPos;
                 break;
@@ -83,21 +81,21 @@ public abstract class Parser {
         return result;
     }
 
-    protected List<Object> _many1(Rule rule) {
+    public List<Object> _many1(Rule rule) {
         ArrayList<Object> result = new ArrayList<Object>();
 
-        result.add(rule.execute());
+        result.add(rule.execute(this));
         result.addAll(_many(rule));
 
         return result;
     }
 
-    protected Object _or(Rule... rules) {
+    public Object _or(Rule... rules) {
         LinkedInputStream origPos = input;
 
         for (Rule rule : rules) {
             try {
-                return rule.execute();
+                return rule.execute(this);
             } catch (ParseFailure ex) {
                 input = origPos;
             }
@@ -106,11 +104,11 @@ public abstract class Parser {
         throw new ParseFailure();
     }
 
-    protected Object _not(Rule rule) {
+    public Object _not(Rule rule) {
         final LinkedInputStream origPos = input;
 
         try {
-            rule.execute();
+            rule.execute(this);
         } catch (ParseFailure ex) {
             input = origPos;
             return null;
@@ -119,11 +117,11 @@ public abstract class Parser {
         throw new ParseFailure();
     }
 
-    protected Object _opt(Rule rule) {
+    public Object _opt(Rule rule) {
         LinkedInputStream origPos = input;
 
         try {
-            return rule.execute();
+            return rule.execute(this);
         } catch (ParseFailure ex) {
             input = origPos;
         }
@@ -131,7 +129,7 @@ public abstract class Parser {
         return null;
     }
 
-    protected Object _anything() {
+    public Object _anything() {
         Object answer = input.head();
         input = input.tail();
         return answer;
@@ -150,7 +148,7 @@ public abstract class Parser {
         List list = (List) obj;
         input = SimpleLinkedInputStream.fromList(list);
 
-        rule.execute();
+        rule.execute(this);
 
         if(!(input instanceof EndLinkedInputStream)) {
             input = origInput;

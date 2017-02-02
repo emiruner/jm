@@ -4,17 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class LinkedInputStreamBase implements LinkedInputStream {
-    protected Map<String, MemoEntry> memo;
+    protected Map<Rule, MemoEntry> memo;
 
     protected LinkedInputStreamBase() {
-        this.memo = new HashMap<String, MemoEntry>();
+        this.memo = new HashMap<Rule, MemoEntry>();
     }
 
-    public MemoEntry memo(String rule) {
+    public MemoEntry memo(Rule rule) {
         return memo.get(rule);
     }
 
-    public MemoEntry memoize(String rule, MemoEntry newMemo) {
+    public MemoEntry memoize(Rule rule, MemoEntry newMemo) {
         memo.put(rule, newMemo);
         return newMemo;
     }
