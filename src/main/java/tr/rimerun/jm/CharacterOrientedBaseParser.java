@@ -1,6 +1,6 @@
 package tr.rimerun.jm;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 @SuppressWarnings({"UnusedDeclaration"})
 public class CharacterOrientedBaseParser extends SimpleParser {
@@ -13,7 +13,14 @@ public class CharacterOrientedBaseParser extends SimpleParser {
                 final String value = (String) apply("anything");
 
                 apply("spaces");
-                applyWithArgs("seq", Arrays.asList(value.toCharArray()));
+
+                final ArrayList<Character> chars = new ArrayList<Character>(value.length());
+
+                for (char ch : value.toCharArray()) {
+                    chars.add(ch);
+                }
+
+                applyWithArgs("seq", chars);
 
                 _or(new Rule() {
                         public Object execute() {
