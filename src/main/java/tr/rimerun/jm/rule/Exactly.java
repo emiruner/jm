@@ -13,7 +13,7 @@ public class Exactly implements Rule {
         final Object o = parser.apply(Anything.Instance);
         final Object p = parser.apply(Anything.Instance);
 
-        parser.ensure(o.equals(p));
+        parser.ensure(o.equals(p), "expecting: '" + o + "' but found: '" + p + "'");
 
         return p;
     }

@@ -55,6 +55,12 @@ public class Parser {
         }
     }
 
+    public void ensure(boolean pred, String errorMessage) {
+        if(!pred) {
+            throw new ParseFailure(errorMessage);
+        }
+    }
+
     protected void prependInput(Object v) {
         this.input = new SimpleLinkedInputStream(v, input);
     }
