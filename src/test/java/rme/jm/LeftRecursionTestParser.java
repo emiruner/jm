@@ -1,9 +1,4 @@
-package tr.rimerun.jm;
-
-import static tr.rimerun.jm.BaseRules.exactly;
-import static tr.rimerun.jm.TextRules.num;
-import static tr.rimerun.jm.TextRules.spaces;
-import static tr.rimerun.jm.Util.list;
+package rme.jm;
 
 // ometa LeftRecursionTestParser
 public class LeftRecursionTestParser {
@@ -14,14 +9,14 @@ public class LeftRecursionTestParser {
             return parser._or(new Rule() {
                            public Object execute(Parser parser) {
                                Object e = parser.apply(expr);
-                               parser.apply(spaces);
+                               parser.apply(TextRules.spaces);
 
-                               Object t = parser.applyWithArgs(exactly, '-');
-                               Object n = parser.apply(num);
+                               Object t = parser.applyWithArgs(BaseRules.exactly, '-');
+                               Object n = parser.apply(TextRules.num);
 
-                               return list("Expr", e, t, n);
+                               return Util.list("Expr", e, t, n);
                            }
-                       }, num
+                       }, TextRules.num
             );
         }
     };

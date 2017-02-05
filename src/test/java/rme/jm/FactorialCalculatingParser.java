@@ -1,8 +1,4 @@
-package tr.rimerun.jm;
-
-import static tr.rimerun.jm.BaseRules.anything;
-import static tr.rimerun.jm.BaseRules.exactly;
-import static tr.rimerun.jm.TextRules.num;
+package rme.jm;
 
 // ometa FactorialCalculatingParser
 public class FactorialCalculatingParser {
@@ -13,13 +9,13 @@ public class FactorialCalculatingParser {
             return parser._or(
                     new Rule() {
                         public Object execute(Parser parser) {
-                            parser.applyWithArgs(exactly, 0);
+                            parser.applyWithArgs(BaseRules.exactly, 0);
                             return 1;
                         }
                     },
                     new Rule() {
                         public Object execute(Parser parser) {
-                            Integer n = (Integer) parser.apply(anything);
+                            Integer n = (Integer) parser.apply(BaseRules.anything);
                             Integer m = (Integer) parser.applyWithArgs(fact, n - 1);
 
                             return n * m;
@@ -32,7 +28,7 @@ public class FactorialCalculatingParser {
     // start = num:n fact(n):f   -> f
     public static final Rule start = new Rule() {
         public Object execute(Parser parser) {
-            Integer n = (Integer) parser.apply(num);
+            Integer n = (Integer) parser.apply(TextRules.num);
             return parser.applyWithArgs(fact, n);
         }
     };

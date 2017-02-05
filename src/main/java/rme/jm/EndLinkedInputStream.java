@@ -1,4 +1,4 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 public class EndLinkedInputStream extends LinkedInputStreamBase {
     public Object head() {

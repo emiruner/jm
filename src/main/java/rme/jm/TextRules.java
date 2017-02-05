@@ -1,16 +1,15 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 import java.util.ArrayList;
 
-import static tr.rimerun.jm.BaseRules.*;
-import static tr.rimerun.jm.RuleUtil.many;
-import static tr.rimerun.jm.RuleUtil.manyOne;
+import static rme.jm.RuleUtil.many;
+import static rme.jm.RuleUtil.manyOne;
 
 public final class TextRules {
     // chr = :o ?(o instanceof Character) -> o
     public static final Rule chr = new Rule() {
         public Object execute(Parser parser) {
-            Object o = parser.apply(anything);
+            Object o = parser.apply(BaseRules.anything);
             parser.ensure(o instanceof Character);
             return o;
         }
@@ -75,7 +74,7 @@ public final class TextRules {
 
             Object minus = parser._opt(new Rule() {
                 public Object execute(Parser parser) {
-                    return parser.applyWithArgs(exactly, '-');
+                    return parser.applyWithArgs(BaseRules.exactly, '-');
                 }
             });
 
@@ -88,7 +87,7 @@ public final class TextRules {
     // token :t = spaces seq(t) (space+ | end) -> t
     public static final Rule token = new Rule() {
         public Object execute(Parser parser) {
-            final String value = (String) parser.apply(anything);
+            final String value = (String) parser.apply(BaseRules.anything);
 
             parser.apply(spaces);
 
@@ -98,8 +97,8 @@ public final class TextRules {
                 chars.add(ch);
             }
 
-            parser.applyWithArgs(seq, chars);
-            parser._or(manyOne(space), end);
+            parser.applyWithArgs(BaseRules.seq, chars);
+            parser._or(manyOne(space), BaseRules.end);
 
             return value;
         }

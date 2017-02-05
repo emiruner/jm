@@ -1,4 +1,4 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 public class RuleUtil {
     public static Rule many(final Rule inner) {

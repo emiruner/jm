@@ -1,13 +1,13 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 import org.junit.Test;
 
 import java.io.StringReader;
 
 import static org.junit.Assert.assertEquals;
-import static tr.rimerun.jm.TextRules.num;
-import static tr.rimerun.jm.TrialParser.listOf;
-import static tr.rimerun.jm.Util.list;
+import static rme.jm.TextRules.num;
+import static rme.jm.TrialParser.listOf;
+import static rme.jm.Util.list;
 
 public class ParserTest {
     @Test

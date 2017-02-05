@@ -1,4 +1,4 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 public interface LinkedInputStream {
     Object head();

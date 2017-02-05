@@ -1,4 +1,4 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 import java.io.IOException;
 import java.io.Reader;

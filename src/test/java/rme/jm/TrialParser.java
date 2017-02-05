@@ -1,14 +1,6 @@
-package tr.rimerun.jm;
+package rme.jm;
 
 import java.util.List;
-
-import static tr.rimerun.jm.BaseRules.anything;
-import static tr.rimerun.jm.BaseRules.end;
-import static tr.rimerun.jm.BaseRules.exactly;
-import static tr.rimerun.jm.TextRules.num;
-import static tr.rimerun.jm.TextRules.spaces;
-import static tr.rimerun.jm.TextRules.token;
-import static tr.rimerun.jm.Util.list;
 
 // ometa SimpleExpressionParser
 @SuppressWarnings({"UnusedDeclaration"})
@@ -22,30 +14,30 @@ public class TrialParser {
                     new Rule() {
                         public Object execute(Parser parser) {
                             Object e = parser.apply(exp);
-                            parser.apply(spaces);
+                            parser.apply(TextRules.spaces);
 
-                            parser.applyWithArgs(exactly, '+');
+                            parser.applyWithArgs(BaseRules.exactly, '+');
 
-                            Object n = parser.apply(num);
+                            Object n = parser.apply(TextRules.num);
 
-                            return list("Add", e, n);
+                            return Util.list("Add", e, n);
                         }
                     },
 
                     new Rule() {
                         public Object execute(Parser parser) {
                             Object e = parser.apply(exp);
-                            parser.apply(spaces);
+                            parser.apply(TextRules.spaces);
 
-                            parser.applyWithArgs(exactly, '-');
+                            parser.applyWithArgs(BaseRules.exactly, '-');
 
-                            Object n = parser.apply(num);
+                            Object n = parser.apply(TextRules.num);
 
-                            return list("Sub", e, n);
+                            return Util.list("Sub", e, n);
                         }
                     },
 
-                    num
+                    TextRules.num
             );
         }
     };
@@ -55,21 +47,21 @@ public class TrialParser {
         public Object execute(Parser parser) {
             parser._not(new Rule() {
                 public Object execute(Parser parser) {
-                    return parser.applyWithArgs(exactly, 'x');
+                    return parser.applyWithArgs(BaseRules.exactly, 'x');
                 }
             });
 
-            return parser.apply(anything);
+            return parser.apply(BaseRules.anything);
         }
     };
 
     // abAndEnd = 'a' 'b' end
     public static final Rule abAndEnd = new Rule() {
         public Object execute(Parser parser) {
-            parser.applyWithArgs(exactly, 'a');
-            parser.applyWithArgs(exactly, 'b');
+            parser.applyWithArgs(BaseRules.exactly, 'a');
+            parser.applyWithArgs(BaseRules.exactly, 'b');
 
-            return parser.apply(end);
+            return parser.apply(BaseRules.end);
         }
     };
 
@@ -78,8 +70,8 @@ public class TrialParser {
         public Object execute(Parser parser) {
             parser._form(new Rule() {
                 public Object execute(Parser parser) {
-                    parser.applyWithArgs(exactly, "hello");
-                    return parser.applyWithArgs(exactly, 3);
+                    parser.applyWithArgs(BaseRules.exactly, "hello");
+                    return parser.applyWithArgs(BaseRules.exactly, 3);
                 }
             });
 
@@ -94,13 +86,13 @@ public class TrialParser {
 
             parser._form(new Rule() {
                 public Object execute(Parser parser) {
-                    parser.applyWithArgs(exactly, "hello");
-                    parser.applyWithArgs(exactly, 3);
+                    parser.applyWithArgs(BaseRules.exactly, "hello");
+                    parser.applyWithArgs(BaseRules.exactly, 3);
 
                     return parser._form(new Rule() {
                         public Object execute(Parser parser) {
-                            aHolder[0] = parser.apply(anything);
-                            return parser.applyWithArgs(exactly, 8);
+                            aHolder[0] = parser.apply(BaseRules.anything);
+                            return parser.applyWithArgs(BaseRules.exactly, 8);
                         }
                     });
                 }
@@ -117,20 +109,20 @@ public class TrialParser {
 
             parser._form(new Rule() {
                 public Object execute(Parser parser) {
-                    parser.applyWithArgs(exactly, 1);
+                    parser.applyWithArgs(BaseRules.exactly, 1);
 
                     aHolder[0] = parser._many1(new Rule() {
                         public Object execute(Parser parser) {
                             return parser._form(new Rule() {
                                 public Object execute(Parser parser) {
-                                    parser.applyWithArgs(exactly, 3);
-                                    return parser.applyWithArgs(exactly, 5);
+                                    parser.applyWithArgs(BaseRules.exactly, 3);
+                                    return parser.applyWithArgs(BaseRules.exactly, 5);
                                 }
                             });
                         }
                     });
 
-                    return parser.applyWithArgs(exactly, 7);
+                    return parser.applyWithArgs(BaseRules.exactly, 7);
                 }
             });
 
@@ -141,17 +133,17 @@ public class TrialParser {
     // listOf :p = apply(p):first ("," apply(p))*:rest -> {List result = list(first); result.addAll(rest)); result}
     public static final Rule listOf = new Rule() {
         public Object execute(Parser parser) {
-            final Rule p = (Rule) parser.apply(anything);
+            final Rule p = (Rule) parser.apply(BaseRules.anything);
 
             final Object first = parser.apply(p);
             final List<Object> rest = parser._many(new Rule() {
                 public Object execute(Parser parser) {
-                    parser.applyWithArgs(token, ",");
+                    parser.applyWithArgs(TextRules.token, ",");
                     return parser.apply(p);
                 }
             });
 
-            final List<Object> result = list(first);
+            final List<Object> result = Util.list(first);
             result.addAll(rest);
 
             return result;
@@ -161,8 +153,8 @@ public class TrialParser {
     // helloWorld = "hello" "world"
     public static final Rule helloWorld = new Rule() {
         public Object execute(Parser parser) {
-            parser.applyWithArgs(token, "hello");
-            return parser.applyWithArgs(token, "world");
+            parser.applyWithArgs(TextRules.token, "hello");
+            return parser.applyWithArgs(TextRules.token, "world");
         }
     };
 }
