@@ -1,11 +1,10 @@
 package tr.rimerun.jm;
 
-import tr.rimerun.jm.rule.Anything;
-import tr.rimerun.jm.rule.Exactly;
-import tr.rimerun.jm.rule.text.Num;
+import static tr.rimerun.jm.BaseRules.anything;
+import static tr.rimerun.jm.BaseRules.exactly;
+import static tr.rimerun.jm.TextRules.num;
 
 // ometa FactorialCalculatingParser
-@SuppressWarnings({"UnusedDeclaration"})
 public class FactorialCalculatingParser {
     // fact 0  =                -> 1
     // fact :n = fact(n - 1):m  -> n * m
@@ -14,13 +13,13 @@ public class FactorialCalculatingParser {
             return parser._or(
                     new Rule() {
                         public Object execute(Parser parser) {
-                            parser.applyWithArgs(Exactly.Instance, 0);
+                            parser.applyWithArgs(exactly, 0);
                             return 1;
                         }
                     },
                     new Rule() {
                         public Object execute(Parser parser) {
-                            Integer n = (Integer) parser.apply(Anything.Instance);
+                            Integer n = (Integer) parser.apply(anything);
                             Integer m = (Integer) parser.applyWithArgs(fact, n - 1);
 
                             return n * m;
@@ -33,7 +32,7 @@ public class FactorialCalculatingParser {
     // start = num:n fact(n):f   -> f
     public static final Rule start = new Rule() {
         public Object execute(Parser parser) {
-            Integer n = (Integer) parser.apply(Num.Instance);
+            Integer n = (Integer) parser.apply(num);
             return parser.applyWithArgs(fact, n);
         }
     };

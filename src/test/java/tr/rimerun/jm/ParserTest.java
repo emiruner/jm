@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.io.StringReader;
 
 import static org.junit.Assert.assertEquals;
+import static tr.rimerun.jm.TextRules.num;
+import static tr.rimerun.jm.TrialParser.listOf;
 import static tr.rimerun.jm.Util.list;
 
 public class ParserTest {
@@ -75,12 +77,11 @@ public class ParserTest {
         assertEquals(list(list(3, 5), list(3, 5)), parser.apply(TrialParser.complexList));
     }
 
-    // TODO: How to do this?
-//    @Test
-//    public void higherOrder() {
-//        final TrialParser parser = new TrialParser(streamFromString("45, 787, 997"));
-//        assertEquals(list(45, 787, 997), parser.applyWithArgs("listOf", "num"));
-//    }
+    @Test
+    public void higherOrder() {
+        final Parser parser = new Parser(streamFromString("45, 787, 997"));
+        assertEquals(list(45, 787, 997), parser.applyWithArgs(listOf, num));
+    }
 
     @Test
     public void tokenRuleMatch() {
