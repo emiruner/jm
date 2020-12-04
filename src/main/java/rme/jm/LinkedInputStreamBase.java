@@ -7,7 +7,7 @@ public abstract class LinkedInputStreamBase implements LinkedInputStream {
     protected Map<Rule, MemoEntry> memo;
 
     protected LinkedInputStreamBase() {
-        this.memo = new HashMap<Rule, MemoEntry>();
+        this.memo = new HashMap<>();
     }
 
     public MemoEntry memo(Rule rule) {

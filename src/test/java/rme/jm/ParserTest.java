@@ -4,23 +4,24 @@ import org.junit.Test;
 
 import java.io.StringReader;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static rme.jm.TextRules.num;
 import static rme.jm.TrialParser.listOf;
-import static rme.jm.Util.list;
 
 public class ParserTest {
     @Test
     public void leftRecursion() {
         final Parser parser = new Parser(streamFromString("1-2-3"));
-        assertEquals(list("Expr", list("Expr", 1, '-', 2), '-', 3), parser.apply(LeftRecursionTestParser.expr));
+        assertEquals(asList("Expr", asList("Expr", 1, '-', 2), '-', 3), parser.apply(LeftRecursionTestParser.expr));
     }
 
     @Test
     public void basicParse() {
         //[Add, [Add, [Sub, -123, -45], 76], 1]
         final Parser parser = new Parser(streamFromString("    -123  -  -45   +76+1 "));
-        assertEquals(list("Add", list("Add", list("Sub", -123, -45), 76), 1), parser.apply(TrialParser.exp));
+        assertEquals(asList("Add", asList("Add", asList("Sub", -123, -45), 76), 1), parser.apply(TrialParser.exp));
     }
 
     @Test
@@ -55,32 +56,32 @@ public class ParserTest {
 
     @Test
     public void simpleListMatch() {
-        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(list("hello", 3)));
-        assertEquals(null, parser.apply(TrialParser.helloAnd3));
+        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(asList("hello", 3)));
+        assertNull(parser.apply(TrialParser.helloAnd3));
     }
 
     @Test
     public void listMatch() {
-        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(list("hello", 3, list(7, 8))));
+        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(asList("hello", 3, asList(7, 8))));
         assertEquals(7, parser.apply(TrialParser.hello3AndSomething));
     }
 
     @Test(expected = ParseFailure.class)
     public void listNotMatch() {
-        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(list("hello", 3, list(7, 1))));
+        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(asList("hello", 3, asList(7, 1))));
         assertEquals(7, parser.apply(TrialParser.hello3AndSomething));
     }
 
     @Test
     public void complexList() {
-        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(list(1, list(3, 5), list(3, 5), 7)));
-        assertEquals(list(list(3, 5), list(3, 5)), parser.apply(TrialParser.complexList));
+        final Parser parser = new Parser(SimpleLinkedInputStream.singleElementList(asList(1, asList(3, 5), asList(3, 5), 7)));
+        assertEquals(asList(asList(3, 5), asList(3, 5)), parser.apply(TrialParser.complexList));
     }
 
     @Test
     public void higherOrder() {
         final Parser parser = new Parser(streamFromString("45, 787, 997"));
-        assertEquals(list(45, 787, 997), parser.applyWithArgs(listOf, num));
+        assertEquals(asList(45, 787, 997), parser.applyWithArgs(listOf, num));
     }
 
     @Test

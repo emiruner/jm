@@ -3,8 +3,8 @@ package rme.jm;
 import java.util.List;
 
 public class SimpleLinkedInputStream extends LinkedInputStreamBase {
-    private Object head;
-    private LinkedInputStream tail;
+    private final Object head;
+    private final LinkedInputStream tail;
 
     public SimpleLinkedInputStream(Object head, LinkedInputStream tail) {
         this.head = head;
@@ -19,7 +19,7 @@ public class SimpleLinkedInputStream extends LinkedInputStreamBase {
         return tail;
     }
 
-    public static LinkedInputStream fromList(List list) {
+    public static LinkedInputStream fromList(List<?> list) {
         if (list == null || list.size() == 0) {
             return new EndLinkedInputStream();
         }

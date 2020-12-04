@@ -71,7 +71,7 @@ public class Parser {
     }
 
     public List<Object> _many(Rule rule) {
-        ArrayList<Object> result = new ArrayList<Object>();
+        ArrayList<Object> result = new ArrayList<>();
 
         while (true) {
             final LinkedInputStream lastPos = input;
@@ -88,7 +88,7 @@ public class Parser {
     }
 
     public List<Object> _many1(Rule rule) {
-        ArrayList<Object> result = new ArrayList<Object>();
+        ArrayList<Object> result = new ArrayList<>();
 
         result.add(rule.execute(this));
         result.addAll(_many(rule));
@@ -151,7 +151,7 @@ public class Parser {
             throw new ParseFailure();
         }
 
-        List list = (List) obj;
+        List<?> list = (List<?>) obj;
         input = SimpleLinkedInputStream.fromList(list);
 
         rule.execute(this);

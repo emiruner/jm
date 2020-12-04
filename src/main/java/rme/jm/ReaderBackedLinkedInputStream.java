@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class ReaderBackedLinkedInputStream extends LinkedInputStreamBase {
-    private Reader reader;
+    private final Reader reader;
     private int ch;
     private boolean readCh;
     private ReaderBackedLinkedInputStream tail;
